@@ -24,13 +24,13 @@ public class BoardDAO {
         this.template = template;
     }
 
-    private final String BOARD_INSERT = "INSERT INTO BOARD (title, writer, content) VALUES (?, ?, ?)";
-    private final String BOARD_UPDATE = "UPDATE BOARD SET title=?, writer=?, content=? WHERE seq=?";
-    private final String BOARD_DELETE = "DELETE FROM BOARD WHERE seq=?";
-    private final String BOARD_GET = "SELECT * FROM BOARD WHERE seq=?";
-    private final String BOARD_LIST = "SELECT * FROM BOARD ORDER BY seq DESC";
-    private final String BOARD_SEARCH = "SELECT * FROM BOARD WHERE title LIKE ? OR writer LIKE ? ORDER BY seq DESC";
-    private final String BOARD_UPDATE_COUNT = "UPDATE BOARD SET cnt = cnt + 1 WHERE seq=?";
+    private final String BOARD_INSERT = "INSERT INTO board (title, writer, content) VALUES (?, ?, ?)";
+    private final String BOARD_UPDATE = "UPDATE board SET title=?, writer=?, content=? WHERE seq=?";
+    private final String BOARD_DELETE = "DELETE FROM board WHERE seq=?";
+    private final String BOARD_GET = "SELECT * FROM board WHERE seq=?";
+    private final String BOARD_LIST = "SELECT * FROM board ORDER BY seq DESC";
+    private final String BOARD_SEARCH = "SELECT * FROM board WHERE title LIKE ? OR writer LIKE ? ORDER BY seq DESC";
+    private final String BOARD_UPDATE_COUNT = "UPDATE board SET cnt = cnt + 1 WHERE seq=?";
 
     public int insertBoard(BoardVO vo) {
         return template.update(BOARD_INSERT, new Object[]{vo.getTitle(), vo.getWriter(), vo.getContent()});
@@ -66,7 +66,11 @@ public class BoardDAO {
 
     public List<BoardVO> searchBoard(String keyword) {
         String searchKeyword = "%" + keyword + "%";
-        return template.query(BOARD_SEARCH, new Object[] {searchKeyword}, new BeanPropertyRowMapper<>(BoardVO.class));
+        return template.query(
+                BOARD_SEARCH,
+                new Object[]{searchKeyword, searchKeyword},
+                new BeanPropertyRowMapper<>(BoardVO.class)
+        );
     }
 
     public int increaseCount(int seq) {

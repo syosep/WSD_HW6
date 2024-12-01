@@ -5,14 +5,15 @@
   Time: 오전 11:05
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ include file="/WEB-INF/views/common/top.jsp" %>
 <html>
 <head>
     <title>게시글 보기</title>
     <script>
         function delete_ok(seq) {
             if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = "/board/delete/" + seq;
+                location.href = '${pageContext.request.contextPath}/board/delete/' + seq;
             }
         }
     </script>
@@ -43,9 +44,10 @@
 </table>
 <br/>
 <div>
-    <button type="button" onclick="location.href='/board/list'">목록으로</button>
-    <button type="button" onclick="location.href='/board/edit/${boardVO.seq}'">수정하기</button>
+    <button type="button" onclick="location.href='${pageContext.request.contextPath}/board/list'">목록으로</button>
+    <button type="button" onclick="location.href='${pageContext.request.contextPath}/board/edit/${boardVO.seq}'">수정하기</button>
     <button type="button" onclick="delete_ok(${boardVO.seq})">삭제하기</button>
 </div>
 </body>
+<%@ include file="/WEB-INF/views/common/bottom.jsp" %>
 </html>

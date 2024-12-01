@@ -1,16 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: sim-yosep
-  Date: 2024. 12. 1.
-  Time: 오전 11:20
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22100423 YosepShim</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-
-</body>
-</html>
+<header>
+    <h1>Web Service Development</h1>
+    <nav>
+        <a href="${pageContext.request.contextPath}/board/list" class="button">목록</a>
+        <a href="${pageContext.request.contextPath}/board/add" class="button">새글쓰기</a>
+    </nav>
+</header>
