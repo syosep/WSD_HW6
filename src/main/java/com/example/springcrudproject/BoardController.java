@@ -16,18 +16,25 @@ public class BoardController {
     @RequestMapping(value = "/board/list", method = RequestMethod.GET)
     public String boardlist(Model model) {
         model.addAttribute("list", boardDAO.getBoardList());
-        return "post";
+        return "list";
     }
 
     @RequestMapping(value = "/board/add", method = RequestMethod.GET)
     public String addPost() {
-        return "/board/add";
+        return "add";
     }
 
-    @RequestMapping(value = "/board/editpost/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/edit/{id}", method = RequestMethod.GET)
     public String editPost(@PathVariable("id") int id, Model model) {
         BoardVO boardVO = boardDAO.getBoard(id);
         model.addAttribute("boardVO", boardVO);
-        return "/board/editpost/{id}";
+        return "edit";
+    }
+
+    @RequestMapping(value = "/board/view/{id}", method = RequestMethod.GET)
+    public String viewPost(@PathVariable("id") int id, Model model) {
+        BoardVO boardVO = boardDAO.getBoard(id);
+        model.addAttribute("boardVO", boardVO);
+        return "view";
     }
 }
