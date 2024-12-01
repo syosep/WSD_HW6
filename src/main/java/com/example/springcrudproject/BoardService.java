@@ -2,9 +2,8 @@ package com.example.springcrudproject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 @Service
 public class BoardService {
@@ -12,19 +11,32 @@ public class BoardService {
     @Autowired
     BoardDAO boardDAO;
 
-    @RequestMapping(value = "/board/addok", method = RequestMethod.POST)
-    public String addPostOK(BoardVO vo) {
-        int i = boardDAO.insertBoard(vo);
-        if (i == 0)
-            System.out.println("데이터 추가 실패 ");
-        else
-            System.out.println("데이터 추가 성공!!!");
-        return "redirect:list";
+    public boolean addPost(BoardVO vo) {
+        int result = boardDAO.insertBoard(vo);
+        return result > 0;
     }
 
-//    @RequestMapping(value = "/board/editok/{id}", method = RequestMethod.POST)
-//    public String editPostOK(BoardVO vo, @PathVariable int id) {
-//        vo.setId(id);
-//
-//    }
+    public boolean editPost(BoardVO vo) {
+        int result = boardDAO.updateBoard(vo);
+        return result > 0;
+    }
+
+    public boolean deletePost(int id) {
+        int result = boardDAO.deleteBoard(id);
+        return result > 0;
+    }
+
+    public BoardVO getPost(int id) {
+        boardDAO.increaseCount(id);
+        return boardDAO.getBoard(id);
+    }
+
+    public List<BoardVO> getPostList() {
+        return boardDAO.getBoardList();
+    }
+
+    public List<BoardVO> searchPosts(String keyword) {
+        return boardDAO.searchBoard(keyword);
+    }
+
 }
