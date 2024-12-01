@@ -24,29 +24,29 @@ public class BoardDAO {
         this.template = template;
     }
 
-    private final String BOARD_INSERT = "insert into BOARD (title, writer, content) values (?, ?, ?)";
-    private final String BOARD_UPDATE = "update BOARD set title=?, writer=?, content=? where seq=?";
-    private final String BOARD_DELETE = "delete from BOARD where seq=?";
+    private final String BOARD_INSERT = "INSERT INTO BOARD (title, writer, content) VALUES (?, ?, ?)";
+    private final String BOARD_UPDATE = "UPDATE BOARD SET title=?, writer=?, content=? WHERE seq=?";
+    private final String BOARD_DELETE = "DELETE FROM BOARD WHERE seq=?";
+    private final String BOARD_GET = "SELECT * FROM BOARD WHERE seq=?";
+    private final String BOARD_LIST = "SELECT * FROM BOARD ORDER BY seq DESC";
+    private final String BOARD_SEARCH = "SELECT * FROM BOARD WHERE title LIKE ? OR writer LIKE ? ORDER BY seq DESC";
+    private final String BOARD_UPDATE_COUNT = "UPDATE BOARD SET cnt = cnt + 1 WHERE seq=?";
 
     public int insertBoard(BoardVO vo) {
         return template.update(BOARD_INSERT, new Object[]{vo.getTitle(), vo.getWriter(), vo.getContent()});
     }
 
     public int deleteBoard(int id) {
-        return template.update(BOARD_DELETE, new Object[]{id});
+        return template.update(BOARD_DELETE, id);
     }
 
-//    public int updateBoard(BoardVO vo) {
-//        return template.update(BOARD_UPDATE, new Object[]{vo.getTitle(), vo.getWriter(), vo.getContent(), vo.getSeq()});
-//    }
-
-    private final String BOARD_GET = "select * from BOARD where seq=?";
+    public int updateBoard(BoardVO vo) {
+        return template.update(BOARD_UPDATE, new Object[]{vo.getTitle(), vo.getWriter(), vo.getContent(), vo.getSeq()});
+    }
 
     public BoardVO getBoard(int seq) {
-        return template.queryForObject(BOARD_GET, new Object[] {seq}, new BeanPropertyRowMapper<BoardVO>(BoardVO.class));
+        return template.queryForObject(BOARD_GET, new Object[] {seq}, new BeanPropertyRowMapper<>(BoardVO.class));
     }
-
-    private final String BOARD_LIST = "select * from BOARD order by seq desc";;
 
     public List<BoardVO> getBoardList() {
         return template.query(BOARD_LIST, new RowMapper<BoardVO>() {
@@ -56,10 +56,20 @@ public class BoardDAO {
                 BoardVO data = new BoardVO();
                 data.setSeq(rs.getInt("seq"));
                 data.setTitle(rs.getString("title"));
-                data.setRegdate(rs.getString("regdate"));
                 data.setWriter(rs.getString("writer"));
+                data.setRegdate(rs.getString("regdate"));
+                data.setCnt(rs.getInt("cnt"));
                 return data;
             }
         });
+    }
+
+    public List<BoardVO> searchBoard(String keyword) {
+        String searchKeyword = "%" + keyword + "%";
+        return template.query(BOARD_SEARCH, new Object[] {searchKeyword}, new BeanPropertyRowMapper<>(BoardVO.class));
+    }
+
+    public int increaseCount(int seq) {
+        return template.update(BOARD_UPDATE_COUNT, seq);
     }
 }
